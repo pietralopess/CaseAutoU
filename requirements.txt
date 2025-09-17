@@ -1,0 +1,5 @@
+flask
+openai
+reportlab
+python-dotenv
+werkzeug
