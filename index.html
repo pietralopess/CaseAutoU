@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoU - Classificador de Emails com IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .spinner {
+      font-size: 1.2rem;
+      color: #FF8F05;
+      margin-top: 1rem;
+    }
+    .result-card {
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-top: 1rem;
+      color: white;
+    }
+    .produtivo { background-color: #22c55e; } /* verde */
+    .improdutivo { background-color: #3b82f6; } /* azul */
+    .response-box {
+      background-color: rgba(255,255,255,0.2);
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      word-break: break-word;
+      line-height: 1.6;
+    }
+    /* Nova estilização para respostas mais organizadas */
+    .response-box p {
+      margin-bottom: 0.5rem;
+    }
+    .history-container {
+      background-color: #f3f4f6;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-top: 2rem;
+    }
+    .history-item {
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      color: white;
+    }
+    .export-btn, .clear-btn { 
+      display: inline-block; 
+      margin-right: 1rem; 
+      margin-top: 0.5rem; 
+      color: #FF8F05; 
+      text-decoration: underline; 
+    }
+  </style>
+  <script>
+    function showLoading() {
+      document.getElementById("loading").style.display = "block";
+    }
+  </script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen font-sans">
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-r from-[#FF7706] via-[#FF8F05] to-[#FFC268] text-white shadow-lg">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+      <h1 class="text-2xl font-bold tracking-wide">AutoU</h1>
+      <nav class="space-x-6 hidden md:flex">
+        <a href="#" class="hover:underline">Início</a>
+        <a href="#" class="hover:underline">Sobre</a>
+        <a href="#" class="hover:underline">Contato</a>
+      </nav>
+      <button class="md:hidden bg-white/20 px-3 py-2 rounded-lg">☰</button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="flex-grow container mx-auto px-6 py-12 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+      Organize sua caixa de entrada com <span class="text-[#FF8F05]">Inteligência Artificial</span>
+    </h2>
+    <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+      Classifique automaticamente seus emails em <strong>Produtivos</strong> e <strong>Improdutivos</strong>, 
+      e receba sugestões de respostas inteligentes.
+    </p>
+
+    <!-- FORM -->
+    <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()" class="bg-white shadow-lg rounded-2xl p-6 max-w-xl mx-auto space-y-4 text-left">
+      <label class="font-medium">Cole o conteúdo do email:</label>
+      <textarea 
+        name="email_text"
+        placeholder="Cole o texto do email aqui..."
+        class="w-full p-4 border rounded-xl resize-none focus:ring-2 focus:ring-[#FF8F05] focus:outline-none"
+        rows="6"></textarea>
+      
+      <label class="font-medium">Ou faça upload de um arquivo (.txt/.pdf):</label>
+      <input type="file" name="email_file" accept=".txt,.pdf" class="w-full border p-2 rounded-xl focus:ring-2 focus:ring-[#FF8F05] focus:outline-none">
+      
+      <button 
+        type="submit" 
+        class="w-full bg-gradient-to-r from-[#FF7706] via-[#FF8F05] to-[#FFC268] text-white font-semibold py-3 rounded-xl shadow hover:opacity-90 transition">
+        Classificar Email
+      </button>
+
+      <div id="loading" class="spinner" style="display:none;">⏳ Processando email com IA...</div>
+    </form>
+
+    <!-- RESULTADOS -->
+    {% if result %}
+    <div class="result-card {% if result.category == 'Produtivo' %}produtivo{% else %}improdutivo{% endif %} max-w-xl mx-auto">
+      <h2 class="font-bold text-lg">📌 Resultado Atual</h2>
+      <p><strong>Categoria:</strong> {{ result.category }}</p>
+      <p><strong>Resposta sugerida:</strong></p>
+      <div class="response-box">
+        {% for paragraph in result.response.split('\n') %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- HISTÓRICO -->
+    {% if history %}
+    <div class="history-container max-w-xl mx-auto text-left">
+      <h2 class="font-bold text-lg mb-2">🗂 Histórico de Últimos Emails</h2>
+      <a href="/export_pdf" class="export-btn">📄 Exportar Histórico em PDF</a>
+      <a href="/clear_history" class="clear-btn">🧹 Limpar Histórico</a>
+      {% for item in history %}
+        <div class="history-item {% if item.category == 'Produtivo' %}produtivo{% else %}improdutivo{% endif %}">
+          <p><strong>Email:</strong> {{ item.content }}</p>
+          <p><strong>Categoria:</strong> {{ item.category }}</p>
+          <p><strong>Resposta sugerida:</strong></p>
+          <div class="response-box">
+            {% for paragraph in item.response.split('\n') %}
+              <p>{{ paragraph }}</p>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-100 border-t text-center py-4">
+    <p class="footer text-gray-600 font-medium">AutoU • IA que organiza sua caixa de entrada</p>
+  </footer>
+
+</body>
+</html>

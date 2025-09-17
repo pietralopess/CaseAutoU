@@ -1,0 +1,23 @@
+📧 Assunto: Atualização sobre o andamento do seu caso
+
+Olá [Nome do Cliente],
+
+Estamos entrando em contato para atualizar o andamento do caso #[Número do Caso], aberto em [Data de Abertura].
+
+Nosso time já realizou as seguintes ações até o momento:
+
+[Resumo da ação 1]
+
+[Resumo da ação 2]
+
+[Resumo da ação 3]
+
+O próximo passo será [descrever o que será feito], com previsão de conclusão até [prazo estimado].
+
+Se houver qualquer informação adicional que deseje compartilhar, por favor, responda a este email para que possamos agilizar a resolução.
+
+Agradecemos pela paciência e seguimos à disposição.
+
+Atenciosamente,
+[Seu Nome]
+[Equipe de Suporte / Empresa]
