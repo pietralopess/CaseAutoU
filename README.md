@@ -30,4 +30,40 @@ A aplicação é capaz de:
 4. Organização visual com cards e histórico de e-mails processados.
 5. Responsividade para diferentes tamanhos de tela.
 
+## Pré-requisitos
+
+1. Antes de começar, você precisa ter instalado:
+Python 3.9+
+pip (gerenciador de pacotes do Python)
+Um editor de código (VS Code recomendado)
+
+2. Clonar ou baixar o projeto
+Se estiver no GitHub:
+git clone https://github.com/seu-repositorio/CaseAutoU.git
+cd CaseAutoU
+
+3. Criar um ambiente virtual (recomendado)
+python -m venv venv
+Ativar o ambiente virtual:
+Windows:
+venv\Scripts\activate
+Linux/Mac:
+source venv/bin/activate
+
+4. Instalar dependências
+pip install -r requirements.txt
+
+5. Configurar a chave da API
+Crie um arquivo .env na raiz do projeto.
+Adicione sua chave da OpenAI nele:
+OPENAI_API_KEY=sua_chave_aqui 
+
+6. Rodar o servidor local
+python app.py
+
+7. Acessar no navegador
+Abra: 👉 http://127.0.0.1:5000
+
+A aplicação estará rodando localmente e pronta para classificar emails. 🎉
+
 ---
